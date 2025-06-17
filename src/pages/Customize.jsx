@@ -54,7 +54,7 @@ const Customize = () => {
 			formData.append('assistantImage', selected.image);
 			formData.append('description', selected.description || 'A creative and friendly assistant for your daily needs.');
 
-			const uploadRes = await fetch('http://localhost:8000/api/user/update', {
+			const uploadRes = await fetch('https://ai-virual-backend1.onrender.com/api/user/update', {
 				method: 'POST',
 				credentials: 'include',
 				body: formData,
