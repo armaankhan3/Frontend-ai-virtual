@@ -6,7 +6,7 @@ export const UserContext = createContext();
 
 const UserProvider = ({ children }) => {
   const [userdata, setUserdata] = useState(null);
-  const serverUrl = "https://ai-virual-backend1.onrender.com";
+  const serverUrl = "https://ai-virual-backend12.onrender.com";
 
   // Fetch current user data and set in context
   const handleCurrentUser = async () => {
