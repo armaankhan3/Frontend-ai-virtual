@@ -41,29 +41,30 @@ const Customize = () => {
 	const [uploading, setUploading] = useState(false);
 	const [uploadError, setUploadError] = useState('');
 	const navigate = useNavigate();
-	const { setUserdata, setAssistant } = useContext(UserContext);
-
+	const { setUserdata, serverUrl: contextServerUrl } = useContext(UserContext);
+	const serverUrl = contextServerUrl || "http://localhost:8000";
+ 
 	const handleNext = async () => {
 		if (selectedIdx === null) return;
 		const selected = assistants[selectedIdx];
 		setUploading(true);
 		setUploadError('');
 		try {
-			const body = JSON.stringify({
-				assistantName: selected.name,
-				assistantImage: selected.image,
-				description: selected.description || 'A creative and friendly assistant for your daily needs.',
-			});
-			const uploadRes = await fetch('https://ai-virual-backend1.onrender.com/api/user/update', {
+			const formData = new FormData();
+			formData.append('assistantName', selected.name);
+			formData.append('assistantImage', selected.image);
+			formData.append('description', selected.description || 'A creative and friendly assistant for your daily needs.');
+
+			const uploadRes = await fetch(`${serverUrl}/api/user/update`, {
 				method: 'POST',
 				credentials: 'include',
-				headers: { 'Content-Type': 'application/json' },
-				body,
+				body: formData,
 			});
 			if (!uploadRes.ok) throw new Error('Upload failed');
 			const data = await uploadRes.json();
-			setUserdata(data.user); // This ensures Home.jsx gets the latest assistant info
-			navigate('/home'); // Go to Home after setting user data
+			setUserdata(data.user);
+			localStorage.setItem('userdata', JSON.stringify(data.user));
+			navigate('/home');
 		} catch (err) {
 			setUploadError('Failed to save assistant.');
 		} finally {
@@ -124,21 +125,17 @@ const Customize = () => {
 			</div>
 
 			{/* New "Create Your Own Assistant" Button */}
-			<button
+			{/* <button
 				type='button'
 				onClick={() => navigate('/customize')}
 				className='mt-12 px-10 py-4 bg-gradient-to-r from-[#00fff0] to-[#822aff] rounded-2xl text-white text-xl font-bold shadow-lg hover:from-[#822aff] hover:to-[#00fff0] transition-all'
 			>
 				Create Your Own Assistant
-			</button>
-
+			</button> */}
 			{selectedIdx !== null && (
 				<button
 					disabled={uploading}
-					onClick={async () => {
-						await handleNext();
-						navigate('/home');
-					}}
+					onClick={handleNext}
 					className='fixed bottom-8 left-1/2 -translate-x-1/2 px-16 py-4 rounded-2xl bg-gradient-to-r from-[#822aff] via-[#00fff0] to-[#822aff] text-white text-2xl font-extrabold shadow-[0_0_32px_#00fff088] animate-pulse border-4 border-[#00fff0]/40 hover:from-[#00fff0] hover:to-[#822aff] transition-all duration-200 z-50 disabled:opacity-60'
 					style={{ letterSpacing: '0.1em' }}
 				>
@@ -156,3 +153,7 @@ const Customize = () => {
 };
 
 export default Customize;
+
+
+
+

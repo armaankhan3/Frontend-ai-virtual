@@ -125,14 +125,6 @@ const Home = () => {
 
   if (!userdata || !userdata.assistantImage || !userdata.assistantName) return null;
 
-  const speakCommand = (text) => {
-    if (!window.speechSynthesis) return;
-    const utterance = new SpeechSynthesisUtterance(text);
-    utterance.lang = 'en-US';
-    utterance.voice = window.speechSynthesis.getVoices().find(voice => voice.name === 'Google US English') || null;
-    window.speechSynthesis.speak(utterance);
-  }
-
   useEffect(() => {
     const speechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
     if (speechRecognition) {
@@ -155,12 +147,11 @@ const Home = () => {
           }
         }
         if (finalTranscript) {
-          // Only trigger if assistant name is followed by a command
-          const name = (userdata.assistantName || '').toLowerCase();
-          const regex = new RegExp(`${name}[, ]+(.*)`, 'i');
+          // Only trigger if assistant name is followed by a command (robust regex)
+          const name = (userdata.assistantName || '').toLowerCase().replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+          const regex = new RegExp(`\\b${name}[, ]+(.*)`, 'i');
           const match = finalTranscript.toLowerCase().match(regex);
           if (match && match[1]) {
-            // Prevent duplicate triggers for the same spoken command
             if (lastSpoken !== match[1].trim()) {
               setCommand(match[1].trim());
               setLastSpoken(match[1].trim());

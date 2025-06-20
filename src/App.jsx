@@ -3,6 +3,8 @@ import { Routes, Route, Navigate } from "react-router-dom";
 
 import { UserContext } from "./contaxt/UserContext";
 
+// This file contains the main application routes and logic for user authentication and assistant setup.
+
 import Signin from "./pages/Signin";
 import Signup from "./pages/Signup";
 import Customize from "./pages/Customize";
