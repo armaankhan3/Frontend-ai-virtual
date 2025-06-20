@@ -267,9 +267,38 @@ const Home = () => {
 
       {/* Right: AudioStatus and Chat Section */}
       <div className="flex-1 flex flex-col items-center justify-center w-full max-w-xl relative z-10 min-w-[340px] min-h-[540px] md:min-w-[420px] md:min-h-[600px]">
+        {/* Animated Activity Status Bar */}
+        <div className="w-full flex items-center justify-center mb-4">
+          <div className={`relative flex items-center gap-3 px-6 py-3 rounded-full font-semibold text-base shadow-xl border-2 transition-all duration-300 overflow-hidden
+            ${listening ? 'bg-gradient-to-r from-green-900/60 via-green-800/40 to-cyan-900/40 border-green-400/80' : 'bg-gradient-to-r from-red-900/60 via-red-800/40 to-purple-900/40 border-red-400/80'}`}
+          >
+            {/* Animated Glow Border */}
+            {listening && (
+              <span className="absolute inset-0 rounded-full border-4 border-green-400/40 blur-md animate-pulse z-0"></span>
+            )}
+            {/* Animated Icon */}
+            <span className="relative z-10">
+              {listening ? (
+                <svg className="w-6 h-6 text-green-400 animate-bounce" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 19V6a3 3 0 016 0v13m-6 0a3 3 0 006 0m-6 0H5a2 2 0 01-2-2v-2a2 2 0 012-2h2m6 6h4a2 2 0 002-2v-2a2 2 0 00-2-2h-2" /></svg>
+              ) : (
+                <svg className="w-6 h-6 text-red-400 animate-pulse" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M18.364 5.636l-1.414 1.414A9 9 0 015.636 18.364l-1.414-1.414M15 12a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
+              )}
+            </span>
+            {/* Soundwave Animation */}
+            {listening && (
+              <span className="flex items-end gap-1 h-6 relative z-10">
+                {[1,2,3,4,5].map(i => (
+                  <span key={i} className={`w-1.5 rounded bg-green-400 animate-wave`} style={{animationDelay: `${i * 0.12}s`}}></span>
+                ))}
+              </span>
+            )}
+            {/* Animated Text */}
+            <span className={`relative z-10 font-bold bg-gradient-to-r from-green-300 via-cyan-200 to-green-300 bg-clip-text text-transparent animate-shimmer`}>{listening ? 'Listening...' : 'Not Listening'}</span>
+          </div>
+        </div>
         <AudioStatus
           assistantName={userdata.assistantName}
-          listening={true} // Always listening
+          listening={listening}
         />
         {/* Chat-like response area */}
         <div
@@ -369,6 +398,13 @@ const Home = () => {
         }
         .animate-fadein {
           animation: fadein 0.5s;
+        }
+        @keyframes wave {
+          0%, 100% { height: 0.5rem; }
+          50% { height: 1.5rem; }
+        }
+        .animate-wave {
+          animation: wave 1.2s infinite;
         }
       `}</style>
     </div>
