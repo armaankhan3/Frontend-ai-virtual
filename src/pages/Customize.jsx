@@ -49,15 +49,16 @@ const Customize = () => {
 		setUploading(true);
 		setUploadError('');
 		try {
-			const formData = new FormData();
-			formData.append('assistantName', selected.name);
-			formData.append('assistantImage', selected.image);
-			formData.append('description', selected.description || 'A creative and friendly assistant for your daily needs.');
-
+			const body = JSON.stringify({
+				assistantName: selected.name,
+				assistantImage: selected.image,
+				description: selected.description || 'A creative and friendly assistant for your daily needs.',
+			});
 			const uploadRes = await fetch('https://ai-virual-backend1.onrender.com/api/user/update', {
 				method: 'POST',
 				credentials: 'include',
-				body: formData,
+				headers: { 'Content-Type': 'application/json' },
+				body,
 			});
 			if (!uploadRes.ok) throw new Error('Upload failed');
 			const data = await uploadRes.json();

@@ -131,50 +131,54 @@ const Signup = () => {
   return (
     <div className="relative min-h-screen flex items-center justify-center overflow-hidden">
       <FuturisticBG />
-      <AuthCard
-        title="Create Your AI Account"
-        footer={<>
-          <button
-            type="submit"
-            className="w-full py-3 mt-2 rounded-2xl bg-gradient-to-r from-[#191819] to-[#00fff0] text-white font-bold text-lg shadow-lg hover:from-[#00fff0] hover:to-[#822aff] transition-all duration-200 tracking-wider"
-            form="signup-form"
-          >Signin</button>
-          <div className="mt-4 text-[#bfaaff] text-sm">
-            Already have an account?{' '}
-            <span className="text-[#00fff0] cursor-pointer hover:underline" onClick={() => navigate('/signin')}>Sign In</span>
-          </div>
-        </>}
-      >
-        <form id="signup-form" onSubmit={handleSignup} className="flex flex-col gap-5">
-          <Input
-            type="text"
-            placeholder="Full Name"
-            value={name}
-            onChange={e => setName(e.target.value)}
-            autoComplete="username"
-          />
-          <Input
-            type="email"
-            placeholder="Email Address"
-            value={email}
-            onChange={e => setEmail(e.target.value)}
-            autoComplete="email"
-          />
-          <Input
-            type={showPassword ? 'text' : 'password'}
-            placeholder="Password"
-            value={password}
-            onChange={e => setPassword(e.target.value)}
-            autoComplete="new-password"
-            icon
-            show={showPassword}
-            onIconClick={() => setShowPassword(s => !s)}
-          />
-          {error && (
-            <div className="text-pink-400 text-xs text-center animate-pulse mt-2">{error}</div>
-          )}
-        </form>
-      </AuthCard>
+     <AuthCard
+  title="Create Your AI Account"
+  footer={
+    <div className="mt-4 text-[#bfaaff] text-sm">
+      Already have an account?{' '}
+      <span className="text-[#00fff0] cursor-pointer hover:underline" onClick={() => navigate('/signin')}>Sign In</span>
+    </div>
+  }
+>
+  <form id="signup-form" onSubmit={handleSignup} className="flex flex-col gap-5">
+    <Input
+      type="text"
+      placeholder="Full Name"
+      value={name}
+      onChange={e => setName(e.target.value)}
+      autoComplete="username"
+    />
+    <Input
+      type="email"
+      placeholder="Email Address"
+      value={email}
+      onChange={e => setEmail(e.target.value)}
+      autoComplete="email"
+    />
+    <Input
+      type={showPassword ? 'text' : 'password'}
+      placeholder="Password"
+      value={password}
+      onChange={e => setPassword(e.target.value)}
+      autoComplete="new-password"
+      icon
+      show={showPassword}
+      onIconClick={() => setShowPassword(s => !s)}
+    />
+    {error && (
+      <div className="text-pink-400 text-xs text-center animate-pulse mt-2">{error}</div>
+    )}
+
+    {/* ✅ This is your real submit button */}
+    <button
+      type="submit"
+      className="w-full py-3 mt-2 rounded-2xl bg-gradient-to-r from-[#191819] to-[#00fff0] text-white font-bold text-lg shadow-lg hover:from-[#00fff0] hover:to-[#822aff] transition-all duration-200 tracking-wider"
+    >
+      Sign Up
+    </button>
+  </form>
+</AuthCard>
+
     </div>
   );
 };

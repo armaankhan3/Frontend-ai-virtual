@@ -3,10 +3,12 @@ import axios from 'axios';
 
 export const UserContext = createContext();
 
+const serverUrl = import.meta.env.PROD
+  ? "https://ai-virual-backend12.onrender.com"
+  : "http://localhost:8000";
 
 const UserProvider = ({ children }) => {
   const [userdata, setUserdata] = useState(null);
-  const serverUrl = "https://ai-virual-backend12.onrender.com";
 
   // Fetch current user data and set in context
   const handleCurrentUser = async () => {
@@ -58,3 +60,4 @@ const UserProvider = ({ children }) => {
 };
 
 export default UserProvider;
+export { serverUrl };

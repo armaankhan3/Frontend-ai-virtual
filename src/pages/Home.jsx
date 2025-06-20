@@ -115,6 +115,7 @@ const Home = () => {
   const [command, setCommand] = useState('');
   const [response, setResponse] = useState('');
   const [chat, setChat] = useState([]); // [{from: 'user'|'assistant', text: string}]
+  const [lastSpoken, setLastSpoken] = useState(''); // Prevent duplicate triggers
 
   useEffect(() => {
     if (!userdata || !userdata.assistantImage || !userdata.assistantName) {
@@ -147,15 +148,24 @@ const Home = () => {
         if (isActive) recognition.start(); 
       };
       recognition.onresult = (event) => {
-        const transcript = Array.from(event.results)
-          .map(result => result[0].transcript)
-          .join('');
-        // Improved: Only trigger if assistant name is followed by a command
-        const name = (userdata.assistantName || '').toLowerCase();
-        const regex = new RegExp(`${name}[, ]+(.*)`, 'i');
-        const match = transcript.toLowerCase().match(regex);
-        if (match && match[1]) {
-          setCommand(match[1].trim());
+        let finalTranscript = '';
+        for (let i = event.resultIndex; i < event.results.length; ++i) {
+          if (event.results[i].isFinal) {
+            finalTranscript += event.results[i][0].transcript;
+          }
+        }
+        if (finalTranscript) {
+          // Only trigger if assistant name is followed by a command
+          const name = (userdata.assistantName || '').toLowerCase();
+          const regex = new RegExp(`${name}[, ]+(.*)`, 'i');
+          const match = finalTranscript.toLowerCase().match(regex);
+          if (match && match[1]) {
+            // Prevent duplicate triggers for the same spoken command
+            if (lastSpoken !== match[1].trim()) {
+              setCommand(match[1].trim());
+              setLastSpoken(match[1].trim());
+            }
+          }
         }
       };
       recognition.start();
@@ -164,7 +174,7 @@ const Home = () => {
         recognition.abort();
       };
     }
-  }, [userdata.assistantName]);
+  }, [userdata.assistantName, lastSpoken]);
 
   // Speak the assistant's response when it changes, but only once per response
   useEffect(() => {
@@ -190,11 +200,9 @@ const Home = () => {
         setChat(prev => [...prev, { from: 'user', text: command }]);
         try {
           const geminiRes = await getGeminiResponse(command);
-          console.log('Gemini API response:', geminiRes); // Log response to browser console
           if (geminiRes && geminiRes.response) {
             setResponse(geminiRes.response);
             setChat(prev => [...prev, { from: 'assistant', text: geminiRes.response }]);
-            // If Gemini response includes a redirectUrl, open it in a new tab
             if (geminiRes.redirectUrl) {
               window.open(geminiRes.redirectUrl, '_blank');
             }
@@ -203,10 +211,10 @@ const Home = () => {
             setChat(prev => [...prev, { from: 'assistant', text: "Sorry, I didn't get that." }]);
           }
         } catch (err) {
-          console.error('Gemini API error:', err); // Log error to browser console
           setResponse("Sorry, something went wrong.");
           setChat(prev => [...prev, { from: 'assistant', text: "Sorry, something went wrong." }]);
         }
+        setCommand(''); // Clear command after processing
       })();
     }
     // eslint-disable-next-line
