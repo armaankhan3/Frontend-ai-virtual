@@ -1,8 +1,8 @@
 fetch('https://ai-virual-backend5.onrender.com/api/user/current', {
   method: 'GET',
   headers: {
-    'Content-Type': 'application/json',
-    'Authorization': `Bearer ${yourToken}` // Make sure yourToken is set
+    'Content-Type': 'application/json'
+    // Remove Authorization header if using cookies
   },
   credentials: 'include' // If backend uses cookies
 })
