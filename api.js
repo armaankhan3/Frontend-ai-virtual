@@ -1,4 +1,6 @@
-fetch('https://ai-virual-backend5.onrender.com/api/user/current', {
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || 'https://ai-virual-backend5.onrender.com';
+
+fetch(`${BACKEND_URL}/api/user/current`, {
   method: 'GET',
   headers: {
     'Content-Type': 'application/json'
@@ -6,9 +8,15 @@ fetch('https://ai-virual-backend5.onrender.com/api/user/current', {
   },
   credentials: 'include' // If backend uses cookies
 })
-.then(response => {
+.then(async response => {
   if (!response.ok) {
-    throw new Error('Network response was not ok ' + response.statusText);
+    // Try to parse error message from backend
+    let errorMsg = 'Network response was not ok ' + response.statusText;
+    try {
+      const errData = await response.json();
+      errorMsg += ': ' + (errData.message || JSON.stringify(errData));
+    } catch {}
+    throw new Error(errorMsg);
   }
   return response.json();
 })
