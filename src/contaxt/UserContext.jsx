@@ -52,6 +52,28 @@ const UserProvider = ({ children }) => {
     }
   }
 
+  // Helper for authenticated POST requests
+  const authPost = async (url, data) => {
+    try {
+      const result = await axios.post(
+        `${serverUrl}${url}`,
+        data,
+        { withCredentials: true }
+      );
+      return result.data;
+    } catch (error) {
+      if (error.response && error.response.status === 401) {
+        console.warn("Unauthorized: Please log in.");
+      }
+      throw error;
+    }
+  };
+
+  // Example usage for update user
+  const updateUser = async (updateData) => {
+    return await authPost('/api/user/update', updateData);
+  };
+
   useEffect(() => {
     handleCurrentUser();
   }, []);
@@ -72,6 +94,7 @@ const UserProvider = ({ children }) => {
     setUserdata,
     signOut,
     getGeminiResponse,
+    updateUser, // add this to context
   };
 
   return (
