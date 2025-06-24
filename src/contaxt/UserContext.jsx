@@ -4,7 +4,7 @@ import axios from 'axios';
 export const UserContext = createContext();
 
 const serverUrl = import.meta.env.PROD
-  ? "https://ai-virual-backend5.onrender.com"
+  ? "https://ai-assistant-backend-d5ss.onrender.com"
 
   
   : "http://localhost:8000";
