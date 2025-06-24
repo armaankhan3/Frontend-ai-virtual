@@ -60,7 +60,7 @@ const Customize = () => {
       const uploadRes = await fetch(`${serverUrl}/api/user/update`, {
         method: 'POST',
         headers: {
-          Authorization: `Bearer ${token}`, // ✅ Send JWT token
+          Authorization: `Bearer ${token}` // Do NOT set 'Content-Type' when using FormData
         },
         body: formData,
       });
