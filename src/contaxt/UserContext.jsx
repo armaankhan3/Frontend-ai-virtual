@@ -32,6 +32,17 @@ const UserProvider = ({ children }) => {
       return result.data;
     } catch (error) {
       console.error("Error fetching Gemini response:", error);
+      if (error.response) {
+        // Server responded with a status other than 2xx
+        console.error("Response data:", error.response.data);
+        console.error("Response status:", error.response.status);
+      } else if (error.request) {
+        // Request was made but no response received
+        console.error("No response received:", error.request);
+      } else {
+        // Something else happened
+        console.error("Error message:", error.message);
+      }
     }
   }
 
