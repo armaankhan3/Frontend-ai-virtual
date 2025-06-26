@@ -5,9 +5,7 @@ export const UserContext = createContext();
 
 const serverUrl = import.meta.env.PROD
   ? "https://ai-assistant-backend-d5ss.onrender.com"
-
-  
-  : "http://localhost:8000";
+  : "https://backend-ai-assistant.onrender.com";
 
 // Ensure axios sends cookies with every request
 axios.defaults.withCredentials = true;

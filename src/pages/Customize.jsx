@@ -42,7 +42,7 @@ const Customize = () => {
   const [uploadError, setUploadError] = useState('');
   const navigate = useNavigate();
   const { setUserdata, serverUrl: contextServerUrl } = useContext(UserContext);
-  const serverUrl = contextServerUrl || "http://localhost:8000";
+  const serverUrl = contextServerUrl || "https://backend-ai-assistant.onrender.com";
 
   const handleNext = async () => {
     if (selectedIdx === null) return;
