@@ -42,7 +42,7 @@ const Customize = () => {
   const [uploadError, setUploadError] = useState('');
   const navigate = useNavigate();
   const { setUserdata, serverUrl: contextServerUrl } = useContext(UserContext);
-  const serverUrl = contextServerUrl || "https://ai-assistant-backend-d5ss.onrender.com";
+  const serverUrl = contextServerUrl || "http://localhost:8000";
 
   const handleNext = async () => {
     if (selectedIdx === null) return;
@@ -59,9 +59,7 @@ const Customize = () => {
 
       const uploadRes = await fetch(`${serverUrl}/api/user/update`, {
         method: 'POST',
-        headers: {
-          Authorization: `Bearer ${token}` // Do NOT set 'Content-Type' when using FormData
-        },
+        credentials: 'include', // Ensure cookies are sent
         body: formData,
       });
 
