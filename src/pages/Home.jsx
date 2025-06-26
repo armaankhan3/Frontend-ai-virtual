@@ -123,7 +123,21 @@ const Home = () => {
     }
   }, [userdata, navigate]);
 
-  if (!userdata || !userdata.assistantImage || !userdata.assistantName) return null;
+  if (!userdata || !userdata.assistantName || !userdata.assistantImage || !userdata.description) {
+    return (
+      <div className="min-h-screen flex items-center justify-center text-white bg-gradient-to-br from-black via-gray-900 to-black">
+        <div className="text-center">
+          <h2 className="text-2xl font-bold mb-4">Please select your assistant to continue.</h2>
+          <button
+            className="px-6 py-3 rounded-xl bg-gradient-to-r from-[#822aff] to-[#00fff0] text-white font-bold shadow-md hover:from-[#00fff0] hover:to-[#822aff] transition-colors"
+            onClick={() => navigate('/customize')}
+          >
+            Go to Assistant Setup
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   useEffect(() => {
     const speechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
