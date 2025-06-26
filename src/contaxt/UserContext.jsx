@@ -4,8 +4,8 @@ import axios from 'axios';
 export const UserContext = createContext();
 
 const serverUrl = import.meta.env.PROD
-  ? "https://ai-assistant-backend-d5ss.onrender.com"
-  : "https://backend-ai-assistant.onrender.com";
+   "https://backend-ai-assistant.onrender.com";
+ 
 
 // Ensure axios sends cookies with every request
 axios.defaults.withCredentials = true;
